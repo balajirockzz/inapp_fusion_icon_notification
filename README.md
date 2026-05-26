@@ -11,3 +11,8 @@ add the rest service in the module.
 step 4:
 
 check the onload changes.
+
+
+rest api :
+getnewslotplan
+getnewchangerequest
