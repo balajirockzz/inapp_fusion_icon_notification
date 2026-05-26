@@ -1,0 +1,66 @@
+create or replace PROCEDURE terext_slot_notifications_dtls_prc (
+    p_slot_number     IN VARCHAR2,
+    p_page_title      IN VARCHAR2,
+    p_partial_message IN VARCHAR2,
+    p_refurb_message  IN VARCHAR2,
+    p_user_name       IN VARCHAR2,
+    p_out_msg         OUT VARCHAR2
+) AS
+    l_count NUMBER;
+BEGIN
+    -- Check existing record
+
+    SELECT
+        COUNT(*)
+    INTO l_count
+    FROM
+        terext_slot_notifications_dtls
+    WHERE
+            slot_number = p_slot_number
+        AND page_title = p_page_title;
+
+    -- UPDATE
+
+    IF l_count > 0 THEN
+        UPDATE terext_slot_notifications_dtls
+        SET
+            partial_message = p_partial_message,
+            refurb_message = p_refurb_message,
+            last_updated_date = sysdate,
+            last_updated_by = p_user_name
+        WHERE
+                slot_number = p_slot_number
+            AND page_title = p_page_title;
+
+        p_out_msg := 'Record updated successfully';
+
+    -- INSERT
+
+    ELSE
+        INSERT INTO terext_slot_notifications_dtls (
+            slot_number,
+            page_title,
+            partial_message,
+            refurb_message,
+            created_date,
+            created_by,
+            last_updated_date,
+            last_updated_by
+        ) VALUES ( p_slot_number,
+                   p_page_title,
+                   p_partial_message,
+                   p_refurb_message,
+                   sysdate,
+                   p_user_name,
+                   sysdate,
+                   p_user_name );
+
+        p_out_msg := 'Record inserted successfully';
+    END IF;
+
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        p_out_msg := 'Error : ' || sqlerrm;
+END terext_slot_notifications_dtls_prc;
