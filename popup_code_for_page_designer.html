@@ -1,0 +1,366 @@
+<!-- Popup dialog -->
+<oj-popup id="notificationPopup"
+  tail="simple"
+  modality="modeless"
+  auto-dismiss="focusLoss"
+  position.my.horizontal="end"
+  position.my.vertical="top"
+  position.at.horizontal="end"
+  position.at.vertical="bottom">
+  <div style="
+    width: 350px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    padding: 16px;
+  ">
+    <!-- Header -->
+    <div class="oj-flex oj-sm-justify-content-space-between oj-sm-align-items-center oj-sm-margin-2x-bottom">
+      <h4 style="margin:0; font-weight:600;">Notifications</h4>
+      <!-- <oj-button chroming="borderless"
+        display="icons"
+        on-oj-action="[[function() { document.getElementById('notificationPopup').close(); }]]">
+        <span slot="startIcon" class="oj-ux-ico-close"></span>
+      </oj-button> -->
+    </div>
+
+    <!-- New Slot Plans notification -->
+    <div class="oj-md-margin-2x-bottom">
+      <h6 class="oj-typography-bold oj-sm-padding-2x-bottom"
+        style="color: #0992C2; border-bottom: 2px solid #0992C2;">
+        Slot Planning Requests
+      </h6>
+
+ <!-- Mkt group -->
+      <oj-bind-if test="[[ $application.user.roles.TEREXT_SLOT_MKT_GROUP ]]">
+        <oj-bind-if test="[[ $variables.newSlotPlansADP_mkt.data && $variables.newSlotPlansADP_mkt.data.length > 0 ]]">
+          <oj-list-view id="notificationSlotList"
+            data="[[ $variables.newSlotPlansADP_mkt ]]"
+            selection-mode="single"
+            class="oj-sm-width-full"
+            on-selected-changed="[[$listeners.notificationSlotListSelected]]">
+            <template slot="itemTemplate" data-oj-as="item">
+              <div class="notification-item"
+                style="
+                  padding: 12px;
+                  border-radius: 8px;
+                  transition: background 0.2s;
+                  cursor: pointer;
+                "
+                onmouseover="this.style.background='#f5f5f5'"
+                onmouseout="this.style.background='white'">
+                <div class="oj-flex oj-sm-justify-content-space-between oj-sm-align-items-center">
+                  <span class="oj-typography-bold" style="color:#333;">
+                    Slot Number:
+                    <oj-bind-text value="[[ item.data.slot_number ]]"></oj-bind-text>
+                  </span>
+                  <span class="oj-badge status-open" style="font-size:0.75rem;">
+                    <oj-bind-text value="Updated"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    Partial:
+                    <oj-bind-text value="[[ item.data.partial_message ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    Refurb:
+                    <oj-bind-text value="[[ item.data.refurb_message ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div style="font-size:0.8rem; color:#999; margin-top:4px;">
+                  Created:
+                  <oj-bind-text value="[[ item.data.created_date ]]"></oj-bind-text>
+                </div>
+              </div>
+            </template>
+          </oj-list-view>
+        </oj-bind-if>
+        <oj-bind-if test="[[ !$variables.newSlotPlansADP_mkt.data || $variables.newSlotPlansADP_mkt.data.length === 0 ]]">
+          <div class="oj-flex oj-sm-justify-content-center oj-sm-padding-4x-vertical" style="color:#999;">
+            No New Slot Planning Request
+          </div>
+        </oj-bind-if>
+      </oj-bind-if>
+
+      <!-- Ops group -->
+      <oj-bind-if test="[[ $application.user.roles.TEREXT_SLOT_OPS_GROUP ]]">
+        <oj-bind-if test="[[ $variables.newSlotPlansADP_ops.data && $variables.newSlotPlansADP_ops.data.length > 0 ]]">
+          <oj-list-view id="notificationSlotListops"
+            data="[[ $variables.newSlotPlansADP_ops ]]"
+            selection-mode="single"
+            class="oj-sm-width-full"
+            on-selected-changed="[[$listeners.notificationSlotListopsSelected]]">
+            <template slot="itemTemplate" data-oj-as="item">
+              <div class="notification-item"
+                style="
+                  padding: 12px;
+                  border-radius: 8px;
+                  transition: background 0.2s;
+                  cursor: pointer;
+                "
+                onmouseover="this.style.background='#f5f5f5'"
+                onmouseout="this.style.background='white'">
+                <div class="oj-flex oj-sm-justify-content-space-between oj-sm-align-items-center">
+                  <span class="oj-typography-bold" style="color:#333;">
+                    Slot Number:
+                    <oj-bind-text value="[[ item.data.slot_number ]]"></oj-bind-text>
+                  </span>
+                  <span class="oj-badge status-open" style="font-size:0.75rem;">
+                    <oj-bind-text value="Updated"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    Partial:
+                    <oj-bind-text value="[[ item.data.partial_message ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    Refurb:
+                    <oj-bind-text value="[[ item.data.refurb_message ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div style="font-size:0.8rem; color:#999; margin-top:4px;">
+                  Created:
+                  <oj-bind-text value="[[ item.data.created_date ]]"></oj-bind-text>
+                </div>
+              </div>
+            </template>
+          </oj-list-view>
+        </oj-bind-if>
+        <oj-bind-if test="[[ !$variables.newSlotPlansADP_ops.data || $variables.newSlotPlansADP_ops.data.length === 0 ]]">
+          <div class="oj-flex oj-sm-justify-content-center oj-sm-padding-4x-vertical" style="color:#999;">
+            No New Slot Planning Request
+          </div>
+        </oj-bind-if>
+      </oj-bind-if>
+
+      <!-- Admin group -->
+      <oj-bind-if test="[[ $application.user.roles.TEREXT_SLOT_ADMIN_GROUP ]]">
+        <oj-bind-if test="[[ $variables.newSlotPlansADP.data && $variables.newSlotPlansADP.data.length > 0 ]]">
+          <oj-list-view id="notificationSlotListadmin"
+            data="[[ $variables.newSlotPlansADP ]]"
+            selection-mode="single"
+            class="oj-sm-width-full"
+            on-selected-changed="[[$listeners.notificationSlotListadminSelected]]">
+            <template slot="itemTemplate" data-oj-as="item">
+              <div class="notification-item"
+                style="
+                  padding: 12px;
+                  border-radius: 8px;
+                  transition: background 0.2s;
+                  cursor: pointer;
+                "
+                onmouseover="this.style.background='#f5f5f5'"
+                onmouseout="this.style.background='white'">
+                <div class="oj-flex oj-sm-justify-content-space-between oj-sm-align-items-center">
+                  <span class="oj-typography-bold" style="color:#333;">
+                    Slot Number:
+                    <oj-bind-text value="[[ item.data.slot_number ]]"></oj-bind-text>
+                  </span>
+                  <span class="oj-badge status-open" style="font-size:0.75rem;">
+                    <oj-bind-text value="Updated"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    Partial:
+                    <oj-bind-text value="[[ item.data.partial_message ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    Refurb:
+                    <oj-bind-text value="[[ item.data.refurb_message ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div style="font-size:0.8rem; color:#999; margin-top:4px;">
+                  Created:
+                  <oj-bind-text value="[[ item.data.created_date ]]"></oj-bind-text>
+                </div>
+              </div>
+            </template>
+          </oj-list-view>
+        </oj-bind-if>
+        <oj-bind-if test="[[ !$variables.newSlotPlansADP.data || $variables.newSlotPlansADP.data.length === 0 ]]">
+          <div class="oj-flex oj-sm-justify-content-center oj-sm-padding-4x-vertical" style="color:#999;">
+            No New Slot Planning Request
+          </div>
+        </oj-bind-if>
+      </oj-bind-if>
+    </div>
+
+    <!-- Change Requests notifications -->
+    <div class="oj-md-margin-2x-top">
+      <h6 class="oj-typography-bold oj-sm-padding-2x-bottom"
+        style="color:#E67E22; border-bottom:2px solid #E67E22;">
+        Change Requests
+      </h6>
+
+     <!-- Mkt group -->
+      <oj-bind-if test="[[ $application.user.roles.TEREXT_SLOT_MKT_GROUP ]]">
+        <oj-bind-if test="[[ $variables.newChangeRequestsADP_mkt.data && $variables.newChangeRequestsADP_mkt.data.length > 0 ]]">
+          <oj-list-view id="notificationCRListmkt"
+            data="[[ $variables.newChangeRequestsADP_mkt ]]"
+            selection-mode="single"
+            class="oj-sm-width-full"
+            on-selected-changed="[[$listeners.notificationCRListmktSelected]]">
+            <template slot="itemTemplate" data-oj-as="item">
+              <div class="notification-item"
+                style="
+                  padding: 12px;
+                  border-radius: 8px;
+                  transition: background 0.2s;
+                  cursor: pointer;
+                "
+                onmouseover="this.style.background='#f5f5f5'"
+                onmouseout="this.style.background='white'">
+                <div class="oj-flex oj-sm-justify-content-space-between oj-sm-align-items-center">
+                  <span class="oj-typography-bold" style="color:#333;">
+                    <oj-bind-text value="[[ item.data.cr_number ]]"></oj-bind-text>
+                  </span>
+                  <span class="oj-badge status-booked" style="font-size:0.75rem;">
+                    <oj-bind-text value="[[ item.data.cr_status ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    CR Status:
+                    <oj-bind-text value="[[ item.data.cr_status ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    SlotNumber:
+                    <oj-bind-text value="[[ item.data.slot_number ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div style="font-size:0.8rem; color:#999; margin-top:4px;">
+                  Created:
+                  <oj-bind-text value="[[ item.data.created_date ]]"></oj-bind-text>
+                </div>
+              </div>
+            </template>
+          </oj-list-view>
+        </oj-bind-if>
+        <oj-bind-if test="[[ !$variables.newChangeRequestsADP_mkt.data || $variables.newChangeRequestsADP_mkt.data.length === 0 ]]">
+          <div class="oj-flex oj-sm-justify-content-center oj-sm-padding-4x-vertical" style="color:#999;">
+            No New Change Requests
+          </div>
+        </oj-bind-if>
+      </oj-bind-if>
+
+      <!-- Ops group -->
+      <oj-bind-if test="[[ $application.user.roles.TEREXT_SLOT_OPS_GROUP ]]">
+        <oj-bind-if test="[[ $variables.newChangeRequestsADP_ops.data && $variables.newChangeRequestsADP_ops.data.length > 0 ]]">
+          <oj-list-view id="notificationCRListops"
+            data="[[ $variables.newChangeRequestsADP_ops ]]"
+            selection-mode="single"
+            class="oj-sm-width-full"
+            on-selected-changed="[[$listeners.notificationCRListopsSelected]]">
+            <template slot="itemTemplate" data-oj-as="item">
+              <div class="notification-item"
+                style="
+                  padding: 12px;
+                  border-radius: 8px;
+                  transition: background 0.2s;
+                  cursor: pointer;
+                "
+                onmouseover="this.style.background='#f5f5f5'"
+                onmouseout="this.style.background='white'">
+                <div class="oj-flex oj-sm-justify-content-space-between oj-sm-align-items-center">
+                  <span class="oj-typography-bold" style="color:#333;">
+                    <oj-bind-text value="[[ item.data.cr_number ]]"></oj-bind-text>
+                  </span>
+                  <span class="oj-badge status-booked" style="font-size:0.75rem;">
+                    <oj-bind-text value="[[ item.data.cr_status ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    CR Status:
+                    <oj-bind-text value="[[ item.data.cr_status ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    SlotNumber:
+                    <oj-bind-text value="[[ item.data.slot_number ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div style="font-size:0.8rem; color:#999; margin-top:4px;">
+                  Created:
+                  <oj-bind-text value="[[ item.data.created_date ]]"></oj-bind-text>
+                </div>
+              </div>
+            </template>
+          </oj-list-view>
+        </oj-bind-if>
+        <oj-bind-if test="[[ !$variables.newChangeRequestsADP_ops.data || $variables.newChangeRequestsADP_ops.data.length === 0 ]]">
+          <div class="oj-flex oj-sm-justify-content-center oj-sm-padding-4x-vertical" style="color:#999;">
+            No New Change Requests
+          </div>
+        </oj-bind-if>
+      </oj-bind-if>  
+
+      <!-- Admin group -->
+      <oj-bind-if test="[[ $application.user.roles.TEREXT_SLOT_ADMIN_GROUP ]]">
+        <oj-bind-if test="[[ $variables.newChangeRequestsADP.data && $variables.newChangeRequestsADP.data.length > 0 ]]">
+          <oj-list-view id="notificationCRListadmin"
+            data="[[ $variables.newChangeRequestsADP ]]"
+            selection-mode="single"
+            class="oj-sm-width-full"
+            on-selected-changed="[[$listeners.notificationCRListadminSelected]]">
+            <template slot="itemTemplate" data-oj-as="item">
+              <div class="notification-item"
+                style="
+                  padding: 12px;
+                  border-radius: 8px;
+                  transition: background 0.2s;
+                  cursor: pointer;
+                "
+                onmouseover="this.style.background='#f5f5f5'"
+                onmouseout="this.style.background='white'">
+                <div class="oj-flex oj-sm-justify-content-space-between oj-sm-align-items-center">
+                  <span class="oj-typography-bold" style="color:#333;">
+                    <oj-bind-text value="[[ item.data.cr_number ]]"></oj-bind-text>
+                  </span>
+                  <span class="oj-badge status-booked" style="font-size:0.75rem;">
+                    <oj-bind-text value="[[ item.data.cr_status ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    CR Status:
+                    <oj-bind-text value="[[ item.data.cr_status ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div class="oj-sm-margin-1x-top" style="font-size:0.85rem; color:#666;">
+                  <span>
+                    SlotNumber:
+                    <oj-bind-text value="[[ item.data.slot_number ]]"></oj-bind-text>
+                  </span>
+                </div>
+                <div style="font-size:0.8rem; color:#999; margin-top:4px;">
+                  Created:
+                  <oj-bind-text value="[[ item.data.created_date ]]"></oj-bind-text>
+                </div>
+              </div>
+            </template>
+          </oj-list-view>
+        </oj-bind-if>
+        <oj-bind-if test="[[ !$variables.newChangeRequestsADP.data || $variables.newChangeRequestsADP.data.length === 0 ]]">
+          <div class="oj-flex oj-sm-justify-content-center oj-sm-padding-4x-vertical" style="color:#999;">
+            No New Change Requests
+          </div>
+        </oj-bind-if>
+      </oj-bind-if>
+    </div>
+  </div>
+</oj-popup>
